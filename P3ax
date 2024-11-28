@@ -11,7 +11,7 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 -- Create Frame (main container for the GUI)
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 200, 0, 120)  -- Smaller size
+mainFrame.Size = UDim2.new(0, 200, 0, 180)  -- Adjusted size to fit both buttons
 mainFrame.Position = UDim2.new(0, 10, 0, 10)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.BorderSizePixel = 0
@@ -52,7 +52,7 @@ local plusButtonSpeedCorner = Instance.new("UICorner")
 plusButtonSpeedCorner.CornerRadius = UDim.new(0, 8)  -- Smaller corner radius
 plusButtonSpeedCorner.Parent = plusButtonSpeed
 
--- Create "+" Icon Button for Jump Power
+-- Create "+" Icon Button for Jump Power (Positioned Below the Speed Button)
 local plusButtonJump = Instance.new("TextButton")
 plusButtonJump.Name = "PlusButtonJump"
 plusButtonJump.Text = "+"
@@ -60,7 +60,7 @@ plusButtonJump.Font = Enum.Font.SourceSansBold
 plusButtonJump.TextSize = 18  -- Smaller text size
 plusButtonJump.TextColor3 = Color3.fromRGB(255, 255, 255)
 plusButtonJump.Size = UDim2.new(0, 80, 0, 40)  -- Smaller button size
-plusButtonJump.Position = UDim2.new(0, 100, 0, 40)
+plusButtonJump.Position = UDim2.new(0, 10, 0, 90)  -- Positioned below the green button
 plusButtonJump.BackgroundColor3 = Color3.fromRGB(255, 165, 0)  -- Orange for jump power
 plusButtonJump.Parent = mainFrame
 
@@ -77,7 +77,7 @@ toggleButton.Font = Enum.Font.SourceSansBold
 toggleButton.TextSize = 16  -- Smaller text size
 toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleButton.Size = UDim2.new(0, 80, 0, 40)  -- Smaller button size
-toggleButton.Position = UDim2.new(0, 190, 0, 40)
+toggleButton.Position = UDim2.new(0, 100, 0, 40)
 toggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
 toggleButton.Parent = mainFrame
 
@@ -96,7 +96,7 @@ infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 infoLabel.BackgroundTransparency = 1
 infoLabel.TextWrapped = true
 infoLabel.Size = UDim2.new(1, -10, 0, 30)  -- Smaller label size
-infoLabel.Position = UDim2.new(0, 10, 0, 80)  -- Adjusted position
+infoLabel.Position = UDim2.new(0, 10, 0, 130)  -- Adjusted position
 infoLabel.Parent = mainFrame
 
 -- Speed & Jump Power Variables
