@@ -11,7 +11,7 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 -- Create Frame (main container for the GUI)
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 200, 0, 180)  -- Adjusted size to fit both buttons
+mainFrame.Size = UDim2.new(0, 180, 0, 160)  -- Adjusted size for compactness
 mainFrame.Position = UDim2.new(0, 10, 0, 10)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.BorderSizePixel = 0
@@ -21,7 +21,7 @@ mainFrame.Parent = screenGui
 
 -- Add Rounded Corners to the Frame
 local frameCorner = Instance.new("UICorner")
-frameCorner.CornerRadius = UDim.new(0, 10)  -- Reduced corner radius
+frameCorner.CornerRadius = UDim.new(0, 8)  -- Reduced corner radius for compact UI
 frameCorner.Parent = mainFrame
 
 -- Add Title Label
@@ -29,10 +29,10 @@ local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "TitleLabel"
 titleLabel.Text = "Speed & Jump Boost Controls"
 titleLabel.Font = Enum.Font.SourceSansBold
-titleLabel.TextSize = 16  -- Smaller text size
+titleLabel.TextSize = 14  -- Smaller text size
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Size = UDim2.new(1, 0, 0, 20)  -- Reduced height
+titleLabel.Size = UDim2.new(1, 0, 0, 20)  -- Smaller height
 titleLabel.Parent = mainFrame
 
 -- Create "+" Icon Button for Speed
@@ -40,16 +40,16 @@ local plusButtonSpeed = Instance.new("TextButton")
 plusButtonSpeed.Name = "PlusButtonSpeed"
 plusButtonSpeed.Text = "+"
 plusButtonSpeed.Font = Enum.Font.SourceSansBold
-plusButtonSpeed.TextSize = 18  -- Smaller text size
+plusButtonSpeed.TextSize = 16  -- Smaller text size
 plusButtonSpeed.TextColor3 = Color3.fromRGB(255, 255, 255)
-plusButtonSpeed.Size = UDim2.new(0, 80, 0, 40)  -- Smaller button size
+plusButtonSpeed.Size = UDim2.new(0, 60, 0, 30)  -- Smaller button size
 plusButtonSpeed.Position = UDim2.new(0, 10, 0, 40)
 plusButtonSpeed.BackgroundColor3 = Color3.fromRGB(0, 170, 0)  -- Green for speed
 plusButtonSpeed.Parent = mainFrame
 
 -- Add Rounded Corners to the "+" Button for Speed
 local plusButtonSpeedCorner = Instance.new("UICorner")
-plusButtonSpeedCorner.CornerRadius = UDim.new(0, 8)  -- Smaller corner radius
+plusButtonSpeedCorner.CornerRadius = UDim.new(0, 6)  -- Smaller corner radius
 plusButtonSpeedCorner.Parent = plusButtonSpeed
 
 -- Create "+" Icon Button for Jump Power (Positioned Below the Speed Button)
@@ -57,16 +57,16 @@ local plusButtonJump = Instance.new("TextButton")
 plusButtonJump.Name = "PlusButtonJump"
 plusButtonJump.Text = "+"
 plusButtonJump.Font = Enum.Font.SourceSansBold
-plusButtonJump.TextSize = 18  -- Smaller text size
+plusButtonJump.TextSize = 16  -- Smaller text size
 plusButtonJump.TextColor3 = Color3.fromRGB(255, 255, 255)
-plusButtonJump.Size = UDim2.new(0, 80, 0, 40)  -- Smaller button size
-plusButtonJump.Position = UDim2.new(0, 10, 0, 90)  -- Positioned below the green button
+plusButtonJump.Size = UDim2.new(0, 60, 0, 30)  -- Smaller button size
+plusButtonJump.Position = UDim2.new(0, 10, 0, 80)  -- Positioned below the green button
 plusButtonJump.BackgroundColor3 = Color3.fromRGB(255, 165, 0)  -- Orange for jump power
 plusButtonJump.Parent = mainFrame
 
 -- Add Rounded Corners to the "+" Button for Jump Power
 local plusButtonJumpCorner = Instance.new("UICorner")
-plusButtonJumpCorner.CornerRadius = UDim.new(0, 8)  -- Smaller corner radius
+plusButtonJumpCorner.CornerRadius = UDim.new(0, 6)  -- Smaller corner radius
 plusButtonJumpCorner.Parent = plusButtonJump
 
 -- Create Toggle Button
@@ -74,16 +74,16 @@ local toggleButton = Instance.new("TextButton")
 toggleButton.Name = "ToggleButton"
 toggleButton.Text = "ON"
 toggleButton.Font = Enum.Font.SourceSansBold
-toggleButton.TextSize = 16  -- Smaller text size
+toggleButton.TextSize = 14  -- Smaller text size
 toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Size = UDim2.new(0, 80, 0, 40)  -- Smaller button size
-toggleButton.Position = UDim2.new(0, 100, 0, 40)
+toggleButton.Size = UDim2.new(0, 60, 0, 30)  -- Smaller button size
+toggleButton.Position = UDim2.new(0, 80, 0, 40)
 toggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
 toggleButton.Parent = mainFrame
 
 -- Add Rounded Corners to the Toggle Button
 local toggleButtonCorner = Instance.new("UICorner")
-toggleButtonCorner.CornerRadius = UDim.new(0, 8)  -- Smaller corner radius
+toggleButtonCorner.CornerRadius = UDim.new(0, 6)  -- Smaller corner radius
 toggleButtonCorner.Parent = toggleButton
 
 -- Add Info Label
@@ -91,12 +91,12 @@ local infoLabel = Instance.new("TextLabel")
 infoLabel.Name = "InfoLabel"
 infoLabel.Text = "Click '+' to increase speed or jump power. Use the toggle to enable or disable."
 infoLabel.Font = Enum.Font.SourceSans
-infoLabel.TextSize = 14  -- Smaller text size
+infoLabel.TextSize = 12  -- Smaller text size
 infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 infoLabel.BackgroundTransparency = 1
 infoLabel.TextWrapped = true
 infoLabel.Size = UDim2.new(1, -10, 0, 30)  -- Smaller label size
-infoLabel.Position = UDim2.new(0, 10, 0, 130)  -- Adjusted position
+infoLabel.Position = UDim2.new(0, 10, 0, 120)  -- Adjusted position
 infoLabel.Parent = mainFrame
 
 -- Speed & Jump Power Variables
