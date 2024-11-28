@@ -18,30 +18,26 @@ mainFrame.BorderSizePixel = 0
 mainFrame.Active = true -- Enables interaction
 mainFrame.Draggable = true -- Enables dragging
 mainFrame.Parent = screenGui
--- Create the ScreenGui and Frame
-local player = game.Players.LocalPlayer
-local screenGui = Instance.new("ScreenGui")
-screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Create the main frame
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 400, 0, 300)  -- Size of the frame
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)  -- Center the frame
-mainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-mainFrame.Parent = screenGui
+-- Create the main frame (for minimization feature)
+local minimizableFrame = Instance.new("Frame")
+minimizableFrame.Size = UDim2.new(0, 400, 0, 300)  -- Size of the frame
+minimizableFrame.Position = UDim2.new(0.5, -200, 0.5, -150)  -- Center the frame
+minimizableFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+minimizableFrame.Parent = screenGui
 
 -- Create a button to minimize/maximize the GUI
 local minimizeButton = Instance.new("TextButton")
 minimizeButton.Size = UDim2.new(0, 100, 0, 50)
 minimizeButton.Position = UDim2.new(0.5, -50, 0, -25)  -- Positioned on top of the frame
 minimizeButton.Text = "Minimize"
-minimizeButton.Parent = mainFrame
+minimizeButton.Parent = minimizableFrame
 
 -- Create a small panel inside the frame
 local panel = Instance.new("Frame")
 panel.Size = UDim2.new(1, 0, 1, 0)  -- Fill the frame
 panel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-panel.Parent = mainFrame
+panel.Parent = minimizableFrame
 
 -- Variable to track if the frame is minimized
 local isMinimized = false
@@ -50,11 +46,11 @@ local isMinimized = false
 local function toggleGUI()
     if isMinimized then
         panel.Visible = true
-        mainFrame.Size = UDim2.new(0, 400, 0, 300)
+        minimizableFrame.Size = UDim2.new(0, 400, 0, 300)
         minimizeButton.Text = "Minimize"
     else
         panel.Visible = false
-        mainFrame.Size = UDim2.new(0, 400, 0, 50)  -- Shrink the frame to a smaller size
+        minimizableFrame.Size = UDim2.new(0, 400, 0, 50)  -- Shrink the frame to a smaller size
         minimizeButton.Text = "Maximize"
     end
     isMinimized = not isMinimized  -- Toggle the state
@@ -66,7 +62,7 @@ minimizeButton.MouseButton1Click:Connect(toggleGUI)
 -- Add Rounded Corners to the Frame
 local frameCorner = Instance.new("UICorner")
 frameCorner.CornerRadius = UDim.new(0, 15)
-frameCorner.Parent = mainFrame
+frameCorner.Parent = minimizableFrame
 
 -- Add Title Label
 local titleLabel = Instance.new("TextLabel")
@@ -77,7 +73,7 @@ titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.BackgroundTransparency = 1
 titleLabel.Size = UDim2.new(1, 0, 0, 30)
-titleLabel.Parent = mainFrame
+titleLabel.Parent = minimizableFrame
 
 -- Create "+" Icon Button
 local plusButton = Instance.new("TextButton")
@@ -89,7 +85,7 @@ plusButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 plusButton.Size = UDim2.new(0, 100, 0, 50)
 plusButton.Position = UDim2.new(0, 20, 0, 50)
 plusButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-plusButton.Parent = mainFrame
+plusButton.Parent = minimizableFrame
 
 -- Add Rounded Corners to the "+" Button
 local plusButtonCorner = Instance.new("UICorner")
@@ -106,7 +102,7 @@ toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleButton.Size = UDim2.new(0, 100, 0, 50)
 toggleButton.Position = UDim2.new(0, 130, 0, 50)
 toggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
-toggleButton.Parent = mainFrame
+toggleButton.Parent = minimizableFrame
 
 -- Add Rounded Corners to the Toggle Button
 local toggleButtonCorner = Instance.new("UICorner")
@@ -124,7 +120,7 @@ infoLabel.BackgroundTransparency = 1
 infoLabel.TextWrapped = true
 infoLabel.Size = UDim2.new(1, -20, 0, 40)
 infoLabel.Position = UDim2.new(0, 10, 0, 110)
-infoLabel.Parent = mainFrame
+infoLabel.Parent = minimizableFrame
 
 -- Speed Variables
 local defaultSpeed = 16 -- Normal walk speed
