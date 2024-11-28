@@ -27,7 +27,7 @@ frameCorner.Parent = mainFrame
 -- Add Title Label
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "TitleLabel"
-titleLabel.Text = "Speed Boost Controls"
+titleLabel.Text = "Speed & Jump Boost Controls"
 titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.TextSize = 16  -- Smaller text size
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -35,22 +35,39 @@ titleLabel.BackgroundTransparency = 1
 titleLabel.Size = UDim2.new(1, 0, 0, 20)  -- Reduced height
 titleLabel.Parent = mainFrame
 
--- Create "+" Icon Button
-local plusButton = Instance.new("TextButton")
-plusButton.Name = "PlusButton"
-plusButton.Text = "+"
-plusButton.Font = Enum.Font.SourceSansBold
-plusButton.TextSize = 18  -- Smaller text size
-plusButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-plusButton.Size = UDim2.new(0, 80, 0, 40)  -- Smaller button size
-plusButton.Position = UDim2.new(0, 10, 0, 40)
-plusButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-plusButton.Parent = mainFrame
+-- Create "+" Icon Button for Speed
+local plusButtonSpeed = Instance.new("TextButton")
+plusButtonSpeed.Name = "PlusButtonSpeed"
+plusButtonSpeed.Text = "+"
+plusButtonSpeed.Font = Enum.Font.SourceSansBold
+plusButtonSpeed.TextSize = 18  -- Smaller text size
+plusButtonSpeed.TextColor3 = Color3.fromRGB(255, 255, 255)
+plusButtonSpeed.Size = UDim2.new(0, 80, 0, 40)  -- Smaller button size
+plusButtonSpeed.Position = UDim2.new(0, 10, 0, 40)
+plusButtonSpeed.BackgroundColor3 = Color3.fromRGB(0, 170, 0)  -- Green for speed
+plusButtonSpeed.Parent = mainFrame
 
--- Add Rounded Corners to the "+" Button
-local plusButtonCorner = Instance.new("UICorner")
-plusButtonCorner.CornerRadius = UDim.new(0, 8)  -- Smaller corner radius
-plusButtonCorner.Parent = plusButton
+-- Add Rounded Corners to the "+" Button for Speed
+local plusButtonSpeedCorner = Instance.new("UICorner")
+plusButtonSpeedCorner.CornerRadius = UDim.new(0, 8)  -- Smaller corner radius
+plusButtonSpeedCorner.Parent = plusButtonSpeed
+
+-- Create "+" Icon Button for Jump Power
+local plusButtonJump = Instance.new("TextButton")
+plusButtonJump.Name = "PlusButtonJump"
+plusButtonJump.Text = "+"
+plusButtonJump.Font = Enum.Font.SourceSansBold
+plusButtonJump.TextSize = 18  -- Smaller text size
+plusButtonJump.TextColor3 = Color3.fromRGB(255, 255, 255)
+plusButtonJump.Size = UDim2.new(0, 80, 0, 40)  -- Smaller button size
+plusButtonJump.Position = UDim2.new(0, 100, 0, 40)
+plusButtonJump.BackgroundColor3 = Color3.fromRGB(255, 165, 0)  -- Orange for jump power
+plusButtonJump.Parent = mainFrame
+
+-- Add Rounded Corners to the "+" Button for Jump Power
+local plusButtonJumpCorner = Instance.new("UICorner")
+plusButtonJumpCorner.CornerRadius = UDim.new(0, 8)  -- Smaller corner radius
+plusButtonJumpCorner.Parent = plusButtonJump
 
 -- Create Toggle Button
 local toggleButton = Instance.new("TextButton")
@@ -60,7 +77,7 @@ toggleButton.Font = Enum.Font.SourceSansBold
 toggleButton.TextSize = 16  -- Smaller text size
 toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleButton.Size = UDim2.new(0, 80, 0, 40)  -- Smaller button size
-toggleButton.Position = UDim2.new(0, 100, 0, 40)
+toggleButton.Position = UDim2.new(0, 190, 0, 40)
 toggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
 toggleButton.Parent = mainFrame
 
@@ -72,7 +89,7 @@ toggleButtonCorner.Parent = toggleButton
 -- Add Info Label
 local infoLabel = Instance.new("TextLabel")
 infoLabel.Name = "InfoLabel"
-infoLabel.Text = "Click '+' to increase speed. Use the toggle to enable or disable."
+infoLabel.Text = "Click '+' to increase speed or jump power. Use the toggle to enable or disable."
 infoLabel.Font = Enum.Font.SourceSans
 infoLabel.TextSize = 14  -- Smaller text size
 infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -82,9 +99,11 @@ infoLabel.Size = UDim2.new(1, -10, 0, 30)  -- Smaller label size
 infoLabel.Position = UDim2.new(0, 10, 0, 80)  -- Adjusted position
 infoLabel.Parent = mainFrame
 
--- Speed Variables
+-- Speed & Jump Power Variables
 local defaultSpeed = 16 -- Normal walk speed
+local defaultJumpPower = 50 -- Normal jump power
 local speedIncrement = 20 -- Speed added per click (updated to 20)
+local jumpPowerIncrement = 10 -- Jump power added per click
 local boostEnabled = true -- Controls if speed boosting is allowed
 
 -- Function to Toggle Speed Boost
@@ -92,27 +111,38 @@ toggleButton.MouseButton1Click:Connect(function()
     boostEnabled = not boostEnabled
     if not boostEnabled then
         humanoid.WalkSpeed = defaultSpeed -- Reset speed when toggled off
+        humanoid.JumpPower = defaultJumpPower -- Reset jump power when toggled off
     end
     toggleButton.Text = boostEnabled and "ON" or "OFF"
     toggleButton.BackgroundColor3 = boostEnabled and Color3.fromRGB(0, 0, 255) or Color3.fromRGB(255, 0, 0)
 end)
 
 -- Function to Apply Speed Boost
-plusButton.MouseButton1Click:Connect(function()
+plusButtonSpeed.MouseButton1Click:Connect(function()
     if boostEnabled then
         humanoid.WalkSpeed = humanoid.WalkSpeed + speedIncrement
     end
 end)
 
--- Monitor Character Size Changes to Prevent Speed Reduction
+-- Function to Apply Jump Power Boost
+plusButtonJump.MouseButton1Click:Connect(function()
+    if boostEnabled then
+        humanoid.JumpPower = humanoid.JumpPower + jumpPowerIncrement
+    end
+end)
+
+-- Monitor Character Size Changes to Prevent Speed & Jump Power Reduction
 humanoid:GetPropertyChangedSignal("BodyDepthScale"):Connect(function()
     humanoid.WalkSpeed = defaultSpeed -- Reset to default speed if size changes
+    humanoid.JumpPower = defaultJumpPower -- Reset to default jump power if size changes
 end)
 
 humanoid:GetPropertyChangedSignal("BodyHeightScale"):Connect(function()
     humanoid.WalkSpeed = defaultSpeed -- Reset to default speed if size changes
+    humanoid.JumpPower = defaultJumpPower -- Reset to default jump power if size changes
 end)
 
 humanoid:GetPropertyChangedSignal("BodyWidthScale"):Connect(function()
     humanoid.WalkSpeed = defaultSpeed -- Reset to default speed if size changes
+    humanoid.JumpPower = defaultJumpPower -- Reset to default jump power if size changes
 end)
