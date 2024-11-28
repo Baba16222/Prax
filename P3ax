@@ -121,6 +121,7 @@ end)
 plusButtonSpeed.MouseButton1Click:Connect(function()
     if boostEnabled then
         humanoid.WalkSpeed = humanoid.WalkSpeed + speedIncrement
+        print("Speed increased to: " .. humanoid.WalkSpeed) -- Debugging line
     end
 end)
 
@@ -128,6 +129,7 @@ end)
 plusButtonJump.MouseButton1Click:Connect(function()
     if boostEnabled then
         humanoid.JumpPower = humanoid.JumpPower + jumpPowerIncrement
+        print("JumpPower increased to: " .. humanoid.JumpPower) -- Debugging line
     end
 end)
 
