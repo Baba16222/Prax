@@ -18,6 +18,50 @@ mainFrame.BorderSizePixel = 0
 mainFrame.Active = true -- Enables interaction
 mainFrame.Draggable = true -- Enables dragging
 mainFrame.Parent = screenGui
+-- Create the ScreenGui and Frame
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Create the main frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 400, 0, 300)  -- Size of the frame
+mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)  -- Center the frame
+mainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+mainFrame.Parent = screenGui
+
+-- Create a button to minimize/maximize the GUI
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Size = UDim2.new(0, 100, 0, 50)
+minimizeButton.Position = UDim2.new(0.5, -50, 0, -25)  -- Positioned on top of the frame
+minimizeButton.Text = "Minimize"
+minimizeButton.Parent = mainFrame
+
+-- Create a small panel inside the frame
+local panel = Instance.new("Frame")
+panel.Size = UDim2.new(1, 0, 1, 0)  -- Fill the frame
+panel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+panel.Parent = mainFrame
+
+-- Variable to track if the frame is minimized
+local isMinimized = false
+
+-- Function to toggle the visibility of the GUI
+local function toggleGUI()
+    if isMinimized then
+        panel.Visible = true
+        mainFrame.Size = UDim2.new(0, 400, 0, 300)
+        minimizeButton.Text = "Minimize"
+    else
+        panel.Visible = false
+        mainFrame.Size = UDim2.new(0, 400, 0, 50)  -- Shrink the frame to a smaller size
+        minimizeButton.Text = "Maximize"
+    end
+    isMinimized = not isMinimized  -- Toggle the state
+end
+
+-- Connect the button to the toggle function
+minimizeButton.MouseButton1Click:Connect(toggleGUI)
 
 -- Add Rounded Corners to the Frame
 local frameCorner = Instance.new("UICorner")
