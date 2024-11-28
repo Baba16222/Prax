@@ -84,7 +84,7 @@ infoLabel.Parent = mainFrame
 
 -- Speed Variables
 local defaultSpeed = 16 -- Normal walk speed
-local speedIncrement = 25 -- Speed added per click
+local speedIncrement = 20 -- Speed added per click (updated to 20)
 local boostEnabled = true -- Controls if speed boosting is allowed
 
 -- Function to Toggle Speed Boost
