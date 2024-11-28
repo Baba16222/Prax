@@ -1,0 +1,118 @@
+-- Variables
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Create Screen GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "EnhancedSpeedBoostGui"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Create Frame (main container for the GUI)
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 250, 0, 150)
+mainFrame.Position = UDim2.new(0, 10, 0, 10)
+mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true -- Enables interaction
+mainFrame.Draggable = true -- Enables dragging
+mainFrame.Parent = screenGui
+
+-- Add Rounded Corners to the Frame
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0, 15)
+frameCorner.Parent = mainFrame
+
+-- Add Title Label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Text = "Speed Boost Controls"
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextSize = 20
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Size = UDim2.new(1, 0, 0, 30)
+titleLabel.Parent = mainFrame
+
+-- Create "+" Icon Button
+local plusButton = Instance.new("TextButton")
+plusButton.Name = "PlusButton"
+plusButton.Text = "+"
+plusButton.Font = Enum.Font.SourceSansBold
+plusButton.TextSize = 24
+plusButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+plusButton.Size = UDim2.new(0, 100, 0, 50)
+plusButton.Position = UDim2.new(0, 20, 0, 50)
+plusButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+plusButton.Parent = mainFrame
+
+-- Add Rounded Corners to the "+" Button
+local plusButtonCorner = Instance.new("UICorner")
+plusButtonCorner.CornerRadius = UDim.new(0, 10)
+plusButtonCorner.Parent = plusButton
+
+-- Create Toggle Button
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "ToggleButton"
+toggleButton.Text = "ON"
+toggleButton.Font = Enum.Font.SourceSansBold
+toggleButton.TextSize = 20
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.Size = UDim2.new(0, 100, 0, 50)
+toggleButton.Position = UDim2.new(0, 130, 0, 50)
+toggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
+toggleButton.Parent = mainFrame
+
+-- Add Rounded Corners to the Toggle Button
+local toggleButtonCorner = Instance.new("UICorner")
+toggleButtonCorner.CornerRadius = UDim.new(0, 10)
+toggleButtonCorner.Parent = toggleButton
+
+-- Add Info Label
+local infoLabel = Instance.new("TextLabel")
+infoLabel.Name = "InfoLabel"
+infoLabel.Text = "Click '+' to increase speed. Use the toggle to enable or disable."
+infoLabel.Font = Enum.Font.SourceSans
+infoLabel.TextSize = 16
+infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+infoLabel.BackgroundTransparency = 1
+infoLabel.TextWrapped = true
+infoLabel.Size = UDim2.new(1, -20, 0, 40)
+infoLabel.Position = UDim2.new(0, 10, 0, 110)
+infoLabel.Parent = mainFrame
+
+-- Speed Variables
+local defaultSpeed = 16 -- Normal walk speed
+local speedIncrement = 10 -- Speed added per click
+local boostEnabled = true -- Controls if speed boosting is allowed
+
+-- Function to Toggle Speed Boost
+toggleButton.MouseButton1Click:Connect(function()
+    boostEnabled = not boostEnabled
+    if not boostEnabled then
+        humanoid.WalkSpeed = defaultSpeed -- Reset speed when toggled off
+    end
+    toggleButton.Text = boostEnabled and "ON" or "OFF"
+    toggleButton.BackgroundColor3 = boostEnabled and Color3.fromRGB(0, 0, 255) or Color3.fromRGB(255, 0, 0)
+end)
+
+-- Function to Apply Speed Boost
+plusButton.MouseButton1Click:Connect(function()
+    if boostEnabled then
+        humanoid.WalkSpeed = humanoid.WalkSpeed + speedIncrement
+    end
+end)
+
+-- Monitor Character Size Changes to Prevent Speed Reduction
+humanoid:GetPropertyChangedSignal("BodyDepthScale"):Connect(function()
+    humanoid.WalkSpeed = defaultSpeed -- Reset to default speed if size changes
+end)
+
+humanoid:GetPropertyChangedSignal("BodyHeightScale"):Connect(function()
+    humanoid.WalkSpeed = defaultSpeed -- Reset to default speed if size changes
+end)
+
+humanoid:GetPropertyChangedSignal("BodyWidthScale"):Connect(function()
+    humanoid.WalkSpeed = defaultSpeed -- Reset to default speed if size changes
+end)
