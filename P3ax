@@ -1,150 +1,214 @@
--- Variables
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
--- Create Screen GUI
+-- Create ScreenGui
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "EnhancedSpeedBoostGui"
-screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.Name = "EnhancedToggleGui"
+screenGui.Parent = game.CoreGui
 
--- Create Frame (main container for the GUI)
+-- Create Main Frame
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 180, 0, 160)  -- Adjusted size for compactness
-mainFrame.Position = UDim2.new(0, 10, 0, 10)
+mainFrame.Size = UDim2.new(0, 300, 0, 250)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -125)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.BorderSizePixel = 0
-mainFrame.Active = true -- Enables interaction
-mainFrame.Draggable = true -- Enables dragging
 mainFrame.Parent = screenGui
 
--- Add Rounded Corners to the Frame
-local frameCorner = Instance.new("UICorner")
-frameCorner.CornerRadius = UDim.new(0, 8)  -- Reduced corner radius for compact UI
-frameCorner.Parent = mainFrame
+-- Add UI Corner for Rounded Edges
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 10)
+uiCorner.Parent = mainFrame
 
--- Add Title Label
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Name = "TitleLabel"
-titleLabel.Text = "Speed & Jump Boost Controls"
-titleLabel.Font = Enum.Font.SourceSansBold
-titleLabel.TextSize = 14  -- Smaller text size
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.BackgroundTransparency = 1
-titleLabel.Size = UDim2.new(1, 0, 0, 20)  -- Smaller height
-titleLabel.Parent = mainFrame
+-- Add Gradient Background
+local uiGradient = Instance.new("UIGradient")
+uiGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255))
+}
+uiGradient.Parent = mainFrame
 
--- Create "+" Icon Button for Speed
-local plusButtonSpeed = Instance.new("TextButton")
-plusButtonSpeed.Name = "PlusButtonSpeed"
-plusButtonSpeed.Text = "+"
-plusButtonSpeed.Font = Enum.Font.SourceSansBold
-plusButtonSpeed.TextSize = 16  -- Smaller text size
-plusButtonSpeed.TextColor3 = Color3.fromRGB(255, 255, 255)
-plusButtonSpeed.Size = UDim2.new(0, 60, 0, 30)  -- Smaller button size
-plusButtonSpeed.Position = UDim2.new(0, 10, 0, 40)
-plusButtonSpeed.BackgroundColor3 = Color3.fromRGB(0, 170, 0)  -- Green for speed
-plusButtonSpeed.Parent = mainFrame
+-- Create Promotion Label
+local label = Instance.new("TextLabel")
+label.Name = "PromotionLabel"
+label.Text = "P3ax"
+label.Size = UDim2.new(0, 100, 0, 30)
+label.Position = UDim2.new(0, 20, 0, 20)
+label.BackgroundTransparency = 1
+label.TextColor3 = Color3.fromRGB(255, 255, 255)
+label.Font = Enum.Font.SourceSansBold
+label.TextSize = 20
+label.Parent = mainFrame
 
--- Add Rounded Corners to the "+" Button for Speed
-local plusButtonSpeedCorner = Instance.new("UICorner")
-plusButtonSpeedCorner.CornerRadius = UDim.new(0, 6)  -- Smaller corner radius
-plusButtonSpeedCorner.Parent = plusButtonSpeed
+-- Button Style with Gradient
+local function createStylishButton(name, text, position)
+    local button = Instance.new("TextButton")
+    button.Name = name
+    button.Text = text
+    button.Size = UDim2.new(0, 260, 0, 50)
+    button.Position = position
+    button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)  -- Placeholder background color
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 18
+    button.Parent = mainFrame
 
--- Create "+" Icon Button for Jump Power (Positioned Below the Speed Button)
-local plusButtonJump = Instance.new("TextButton")
-plusButtonJump.Name = "PlusButtonJump"
-plusButtonJump.Text = "+"
-plusButtonJump.Font = Enum.Font.SourceSansBold
-plusButtonJump.TextSize = 16  -- Smaller text size
-plusButtonJump.TextColor3 = Color3.fromRGB(255, 255, 255)
-plusButtonJump.Size = UDim2.new(0, 60, 0, 30)  -- Smaller button size
-plusButtonJump.Position = UDim2.new(0, 10, 0, 80)  -- Positioned below the green button
-plusButtonJump.BackgroundColor3 = Color3.fromRGB(255, 165, 0)  -- Orange for jump power
-plusButtonJump.Parent = mainFrame
+    -- Add rounded corners
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = button
 
--- Add Rounded Corners to the "+" Button for Jump Power
-local plusButtonJumpCorner = Instance.new("UICorner")
-plusButtonJumpCorner.CornerRadius = UDim.new(0, 6)  -- Smaller corner radius
-plusButtonJumpCorner.Parent = plusButtonJump
+    -- Add gradient effect
+    local gradient = Instance.new("UIGradient")
+    gradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 128, 0)),  -- Gradient start (orange)
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 128, 255))   -- Gradient end (blue)
+    }
+    gradient.Parent = button
 
--- Create Toggle Button
-local toggleButton = Instance.new("TextButton")
-toggleButton.Name = "ToggleButton"
-toggleButton.Text = "ON"
-toggleButton.Font = Enum.Font.SourceSansBold
-toggleButton.TextSize = 14  -- Smaller text size
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Size = UDim2.new(0, 60, 0, 30)  -- Smaller button size
-toggleButton.Position = UDim2.new(0, 80, 0, 40)
-toggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
-toggleButton.Parent = mainFrame
+    return button
+end
 
--- Add Rounded Corners to the Toggle Button
-local toggleButtonCorner = Instance.new("UICorner")
-toggleButtonCorner.CornerRadius = UDim.new(0, 6)  -- Smaller corner radius
-toggleButtonCorner.Parent = toggleButton
+-- ESP Buttons
+local espButton = createStylishButton("ESPButton", "ESP: OFF", UDim2.new(0, 20, 0, 60))
+local rgbEspButton = createStylishButton("RGBESPButton", "RGB ESP: OFF", UDim2.new(0, 20, 0, 120))
 
--- Add Info Label
-local infoLabel = Instance.new("TextLabel")
-infoLabel.Name = "InfoLabel"
-infoLabel.Text = "Click '+' to increase speed or jump power. Use the toggle to enable or disable."
-infoLabel.Font = Enum.Font.SourceSans
-infoLabel.TextSize = 12  -- Smaller text size
-infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-infoLabel.BackgroundTransparency = 1
-infoLabel.TextWrapped = true
-infoLabel.Size = UDim2.new(1, -10, 0, 30)  -- Smaller label size
-infoLabel.Position = UDim2.new(0, 10, 0, 120)  -- Adjusted position
-infoLabel.Parent = mainFrame
+local espEnabled = false
+local rgbEspEnabled = false
+local rainbowLoop
 
--- Speed & Jump Power Variables
-local defaultSpeed = 16 -- Normal walk speed
-local defaultJumpPower = 50 -- Normal jump power
-local speedIncrement = 20 -- Speed added per click (updated to 20)
-local jumpPowerIncrement = 10 -- Jump power added per click
-local boostEnabled = true -- Controls if speed boosting is allowed
-
--- Function to Toggle Speed Boost
-toggleButton.MouseButton1Click:Connect(function()
-    boostEnabled = not boostEnabled
-    if not boostEnabled then
-        humanoid.WalkSpeed = defaultSpeed -- Reset speed when toggled off
-        humanoid.JumpPower = defaultJumpPower -- Reset jump power when toggled off
-    end
-    toggleButton.Text = boostEnabled and "ON" or "OFF"
-    toggleButton.BackgroundColor3 = boostEnabled and Color3.fromRGB(0, 0, 255) or Color3.fromRGB(255, 0, 0)
-end)
-
--- Function to Apply Speed Boost
-plusButtonSpeed.MouseButton1Click:Connect(function()
-    if boostEnabled then
-        humanoid.WalkSpeed = humanoid.WalkSpeed + speedIncrement
-        print("Speed increased to: " .. humanoid.WalkSpeed) -- Debugging line
+-- Basic ESP Toggle
+espButton.MouseButton1Click:Connect(function()
+    espEnabled = not espEnabled
+    espButton.Text = espEnabled and "ESP: ON" or "ESP: OFF"
+    if espEnabled then
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player ~= game.Players.LocalPlayer and player.Character then
+                local highlight = Instance.new("Highlight")
+                highlight.FillTransparency = 1
+                highlight.OutlineTransparency = 0
+                highlight.OutlineColor = Color3.fromRGB(255, 0, 0)
+                highlight.Parent = player.Character
+            end
+        end
+    else
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player.Character then
+                for _, obj in pairs(player.Character:GetChildren()) do
+                    if obj:IsA("Highlight") then
+                        obj:Destroy()
+                    end
+                end
+            end
+        end
     end
 end)
 
--- Function to Apply Jump Power Boost
-plusButtonJump.MouseButton1Click:Connect(function()
-    if boostEnabled then
-        humanoid.JumpPower = humanoid.JumpPower + jumpPowerIncrement
-        print("JumpPower increased to: " .. humanoid.JumpPower) -- Debugging line
+-- RGB ESP Toggle
+rgbEspButton.MouseButton1Click:Connect(function()
+    rgbEspEnabled = not rgbEspEnabled
+    rgbEspButton.Text = rgbEspEnabled and "RGB ESP: ON" or "RGB ESP: OFF"
+
+    if rgbEspEnabled then
+        -- Start the rainbow loop
+        rainbowLoop = game:GetService("RunService").RenderStepped:Connect(function()
+            for _, player in pairs(game.Players:GetPlayers()) do
+                if player ~= game.Players.LocalPlayer and player.Character then
+                    local highlight = player.Character:FindFirstChildOfClass("Highlight")
+                    if not highlight then
+                        highlight = Instance.new("Highlight")
+                        highlight.FillTransparency = 1
+                        highlight.OutlineTransparency = 0
+                        highlight.Parent = player.Character
+                    end
+                    -- Cycle through rainbow colors
+                    local hue = (tick() % 5) / 5  -- Hue shifts over time
+                    highlight.OutlineColor = Color3.fromHSV(hue, 1, 1)
+                end
+            end
+        end)
+    else
+        -- Stop the rainbow loop and clear highlights
+        if rainbowLoop then
+            rainbowLoop:Disconnect()
+        end
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player.Character then
+                for _, obj in pairs(player.Character:GetChildren()) do
+                    if obj:IsA("Highlight") then
+                        obj:Destroy()
+                    end
+                end
+            end
+        end
     end
 end)
 
--- Monitor Character Size Changes to Prevent Speed & Jump Power Reduction
-humanoid:GetPropertyChangedSignal("BodyDepthScale"):Connect(function()
-    humanoid.WalkSpeed = defaultSpeed -- Reset to default speed if size changes
-    humanoid.JumpPower = defaultJumpPower -- Reset to default jump power if size changes
+-- Minimize Button
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Name = "MinimizeButton"
+minimizeButton.Text = "-"
+minimizeButton.Size = UDim2.new(0, 30, 0, 30)
+minimizeButton.Position = UDim2.new(1, -40, 0, 5)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeButton.Parent = mainFrame
+
+-- Add rounded corners to the minimize button
+local minimizeCorner = Instance.new("UICorner")
+minimizeCorner.CornerRadius = UDim.new(0, 10)
+minimizeCorner.Parent = minimizeButton
+
+local minimized = false
+minimizeButton.MouseButton1Click:Connect(function()
+    minimized = not minimized
+    for _, child in pairs(mainFrame:GetChildren()) do
+        if child ~= minimizeButton and not child:IsA("UICorner") and not child:IsA("UIGradient") then
+            child.Visible = not minimized
+        end
+    end
+    mainFrame.Size = minimized and UDim2.new(0, 300, 0, 50) or UDim2.new(0, 300, 0, 250)
+    minimizeButton.Text = minimized and "+" or "-"
+    label.Position = UDim2.new(0, 20, 0, minimized and 5 or 20)
 end)
 
-humanoid:GetPropertyChangedSignal("BodyHeightScale"):Connect(function()
-    humanoid.WalkSpeed = defaultSpeed -- Reset to default speed if size changes
-    humanoid.JumpPower = defaultJumpPower -- Reset to default jump power if size changes
+-- Draggable functionality for both PC and mobile
+local dragging = false
+local dragStart, startPos
+
+local function startDrag(input)
+    dragging = true
+    dragStart = input.Position
+    startPos = mainFrame.Position
+end
+
+local function updateDrag(input)
+    if dragging then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
+end
+
+local function endDrag()
+    dragging = false
+end
+
+mainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        startDrag(input)
+    end
 end)
 
-humanoid:GetPropertyChangedSignal("BodyWidthScale"):Connect(function()
-    humanoid.WalkSpeed = defaultSpeed -- Reset to default speed if size changes
-    humanoid.JumpPower = defaultJumpPower -- Reset to default jump power if size changes
+mainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        updateDrag(input)
+    end
+end)
+
+mainFrame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        endDrag()
+    end
 end)
