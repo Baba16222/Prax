@@ -1,4 +1,3 @@
--- Create the GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "EnhancedToggleGui"
 screenGui.Parent = game.CoreGui
@@ -6,18 +5,18 @@ screenGui.Parent = game.CoreGui
 -- Create Main Frame
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 300, 0, 250)
-mainFrame.Position = UDim2.new(0.5, -150, 0.5, -125)
+mainFrame.Size = UDim2.new(0, 300, 0, 300)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -150)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
 
--- Rounded edges for Main Frame
+-- Add UI Corner for Rounded Edges
 local uiCorner = Instance.new("UICorner")
 uiCorner.CornerRadius = UDim.new(0, 10)
 uiCorner.Parent = mainFrame
 
--- Gradient Background
+-- Add Gradient Background
 local uiGradient = Instance.new("UIGradient")
 uiGradient.Color = ColorSequence.new{
     ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
@@ -37,36 +36,36 @@ label.Font = Enum.Font.SourceSansBold
 label.TextSize = 20
 label.Parent = mainFrame
 
--- Button Functionality Template
+-- Button Style with Gradient
 local function createStylishButton(name, text, position)
     local button = Instance.new("TextButton")
     button.Name = name
     button.Text = text
     button.Size = UDim2.new(0, 260, 0, 50)
     button.Position = position
-    button.BackgroundColor3 = Color3.fromRGB(70, 70, 70) -- Placeholder background
+    button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.Font = Enum.Font.SourceSans
     button.TextSize = 18
     button.Parent = mainFrame
 
-    -- Rounded corners for button
+    -- Add rounded corners
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 10)
     corner.Parent = button
 
-    -- Gradient background for button
+    -- Add gradient effect
     local gradient = Instance.new("UIGradient")
     gradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 128, 0)), -- Start color
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 128, 255))  -- End color
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 128, 0)), -- Gradient start
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 128, 255)) -- Gradient end
     }
     gradient.Parent = button
 
     return button
 end
 
--- ESP Button
+-- ESP Buttons
 local espButton = createStylishButton("ESPButton", "ESP: OFF", UDim2.new(0, 20, 0, 60))
 local rgbEspButton = createStylishButton("RGBESPButton", "RGB ESP: OFF", UDim2.new(0, 20, 0, 120))
 local aimbotButton = createStylishButton("AimbotButton", "Aimbot: OFF", UDim2.new(0, 20, 0, 180))
@@ -76,7 +75,7 @@ local rgbEspEnabled = false
 local aimbotEnabled = false
 local rainbowLoop
 
--- Basic ESP Toggle
+-- ESP Toggle
 espButton.MouseButton1Click:Connect(function()
     espEnabled = not espEnabled
     espButton.Text = espEnabled and "ESP: ON" or "ESP: OFF"
@@ -109,7 +108,6 @@ rgbEspButton.MouseButton1Click:Connect(function()
     rgbEspButton.Text = rgbEspEnabled and "RGB ESP: ON" or "RGB ESP: OFF"
 
     if rgbEspEnabled then
-        -- Start rainbow loop
         rainbowLoop = game:GetService("RunService").RenderStepped:Connect(function()
             for _, player in pairs(game.Players:GetPlayers()) do
                 if player ~= game.Players.LocalPlayer and player.Character then
@@ -120,14 +118,12 @@ rgbEspButton.MouseButton1Click:Connect(function()
                         highlight.OutlineTransparency = 0
                         highlight.Parent = player.Character
                     end
-                    -- Cycle through rainbow colors
-                    local hue = (tick() % 5) / 5 -- Hue shift over time
+                    local hue = (tick() % 5) / 5
                     highlight.OutlineColor = Color3.fromHSV(hue, 1, 1)
                 end
             end
         end)
     else
-        -- Stop rainbow loop
         if rainbowLoop then
             rainbowLoop:Disconnect()
         end
@@ -147,8 +143,8 @@ end)
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
-local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
 local Locked = false
 local TargetHead = nil
@@ -156,20 +152,24 @@ local TargetHead = nil
 local function GetClosestHead()
     local closestDistance = math.huge
     local closestHead = nil
+    local maxRange = 300 -- Range limit
 
     for _, player in pairs(Players:GetPlayers()) do
         if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
             local head = player.Character.Head
             local headPosition = head.Position
-            local screenPosition, onScreen = Camera:WorldToViewportPoint(headPosition)
+            local distance = (headPosition - LocalPlayer.Character.Head.Position).Magnitude
 
-            if onScreen then
-                local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-                local distance = (screenCenter - Vector2.new(screenPosition.X, screenPosition.Y)).Magnitude
+            if distance <= maxRange then
+                local screenPosition, onScreen = Camera:WorldToViewportPoint(headPosition)
+                if onScreen then
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                    local screenDistance = (screenCenter - Vector2.new(screenPosition.X, screenPosition.Y)).Magnitude
 
-                if distance < closestDistance then
-                    closestDistance = distance
-                    closestHead = head
+                    if screenDistance < closestDistance then
+                        closestDistance = screenDistance
+                        closestHead = head
+                    end
                 end
             end
         end
@@ -178,83 +178,27 @@ local function GetClosestHead()
     return closestHead
 end
 
+local function LockOntoHead()
+    if Locked and TargetHead and TargetHead.Parent then
+        local headPosition = TargetHead.Position
+        Camera.CFrame = CFrame.new(Camera.CFrame.Position, headPosition)
+    end
+end
+
 aimbotButton.MouseButton1Click:Connect(function()
     aimbotEnabled = not aimbotEnabled
     aimbotButton.Text = aimbotEnabled and "Aimbot: ON" or "Aimbot: OFF"
-
     if aimbotEnabled then
-        Locked = true -- Enable camera lock
+        Locked = true
+        TargetHead = GetClosestHead()
     else
-        Locked = false -- Disable camera lock
+        Locked = false
         TargetHead = nil
     end
 end)
 
 RunService.RenderStepped:Connect(function()
-    if aimbotEnabled and Locked then
-        if not TargetHead or not TargetHead.Parent then
-            TargetHead = GetClosestHead()
-        end
-        if TargetHead then
-            Camera.CFrame = CFrame.new(Camera.CFrame.Position, TargetHead.Position)
-        end
-    end
-end)
-
--- Minimize Button
-local minimizeButton = Instance.new("TextButton")
-minimizeButton.Name = "MinimizeButton"
-minimizeButton.Text = "-"
-minimizeButton.Size = UDim2.new(0, 30, 0, 30)
-minimizeButton.Position = UDim2.new(1, -40, 0, 5)
-minimizeButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-minimizeButton.Parent = mainFrame
-
--- Rounded corners for minimize button
-local minimizeCorner = Instance.new("UICorner")
-minimizeCorner.CornerRadius = UDim.new(0, 10)
-minimizeCorner.Parent = minimizeButton
-
-local minimized = false
-minimizeButton.MouseButton1Click:Connect(function()
-    minimized = not minimized
-    for _, child in pairs(mainFrame:GetChildren()) do
-        if child ~= minimizeButton and not child:IsA("UICorner") and not child:IsA("UIGradient") then
-            child.Visible = not minimized
-        end
-    end
-    mainFrame.Size = minimized and UDim2.new(0, 300, 0, 50) or UDim2.new(0, 300, 0, 250)
-    minimizeButton.Text = minimized and "+" or "-"
-    label.Position = UDim2.new(0, 20, 0, minimized and 5 or 20)
-end)
-
--- Dragging Functionality
-local dragging = false
-local dragStart, startPos
-
-mainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = mainFrame.Position
-    end
-end)
-
-mainFrame.InputChanged:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        local delta = input.Position - dragStart
-        mainFrame.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
-        )
-    end
-end)
-
-mainFrame.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = false
+    if Locked then
+        LockOntoHead()
     end
 end)
