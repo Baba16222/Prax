@@ -278,3 +278,39 @@ maximizeButton.MouseButton1Click:Connect(function()
     maximizeButton.Visible = false
     minimizeButton.Visible = true
 end)
+
+-- Create Discord Link Label
+local discordLabel = Instance.new("TextLabel")
+discordLabel.Name = "DiscordLabel"
+discordLabel.Text = "Join our new Discord server: https://discord.gg/crGfmxfcW8"
+discordLabel.Size = UDim2.new(0, 260, 0, 30)
+discordLabel.Position = UDim2.new(0, 20, 0, 240)  -- Position it below the buttons
+discordLabel.BackgroundTransparency = 1
+discordLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+discordLabel.Font = Enum.Font.SourceSans
+discordLabel.TextSize = 14
+discordLabel.TextWrapped = true  -- Wrap text if it's too long
+discordLabel.Parent = mainFrame
+
+-- Minimize/Maximize Logic (Including Discord Label)
+minimizeButton.MouseButton1Click:Connect(function()
+    mainFrame.Size = UDim2.new(0, 300, 0, 50)
+    label.Visible = false
+    espButton.Visible = false
+    rgbEspButton.Visible = false
+    aimbotButton.Visible = false
+    discordLabel.Visible = false  -- Hide Discord link when minimized
+    maximizeButton.Visible = true
+    minimizeButton.Visible = false
+end)
+
+maximizeButton.MouseButton1Click:Connect(function()
+    mainFrame.Size = UDim2.new(0, 300, 0, 300)
+    label.Visible = true
+    espButton.Visible = true
+    rgbEspButton.Visible = true
+    aimbotButton.Visible = true
+    discordLabel.Visible = true  -- Show Discord link when maximized
+    maximizeButton.Visible = false
+    minimizeButton.Visible = true
+end)
